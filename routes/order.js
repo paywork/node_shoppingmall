@@ -7,8 +7,15 @@ const router = express.Router()
 
 // Order create API
 router.post('/', (req, res) => {
+
+    const newOrder = {
+        productid: req.body.productid,
+        quantity: req.body.quantity
+    }
+
     res.json({
-        message: 'order create API'
+        message: 'order create API',
+        orderinfo: newOrder
     })
 })
 

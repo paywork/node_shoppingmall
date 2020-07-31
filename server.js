@@ -1,6 +1,7 @@
 
 const express = require('express')
 const morgan = require('morgan')
+const bodyParser = require('body-parser')
 const app = express()
 
 
@@ -12,10 +13,14 @@ const orderRoute = require('./routes/order')
 
 // 미들웨어 설정(거쳐가는 정류장 같은 것 )
 app.use(morgan('dev'))
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({extended: false}))
 
 
+// Routing 
 app.use('/product', productRoute)
 app.use('/order', orderRoute)
+
 
 const PORT = 3838
 
