@@ -3,20 +3,12 @@ const express = require('express')
 const app = express()
 
 
-app.use((request, response) => {
-   response.json({
-       message: 'okay'
-   }) 
-}) 
+
+const productRoute = require('./routes/product')
 
 
 
-
-
-
-
-
-
+app.use('/product', productRoute)
 
 
 const PORT = 3838
