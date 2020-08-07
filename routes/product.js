@@ -12,11 +12,6 @@ const productModel = require('../models/product')
 router.post('/', (req, res) => {
 
 
-    // const newProduct = {
-    //     name: req.body.productname,
-    //     price: req.body.productprice
-    //
-    // }
     const newProduct = new productModel({
         name: req.body.productname,
         price: req.body.productprice
@@ -36,21 +31,12 @@ router.post('/', (req, res) => {
             })
         })
 
-
-
-    // res.json({
-    //     message: 'proudct create API',
-    //     productInfo: newProduct
-    //
-    // })
 })
 
 
 // product retrieve API
 router.get('/total', (req, res) => {
-    // res.json({
-    //     message: 'product retrieve API'
-    // })
+
     productModel
         .find()
         .then(docs => {
@@ -66,6 +52,39 @@ router.get('/total', (req, res) => {
             })
         })
 })
+
+
+// detail product retrieve API
+router.get('/:productid', (req, res) => {
+
+    productModel
+        .findById(req.params.productid)
+        .then(doc => {
+            if (!doc) {
+                res.json({
+                    message: "no product"
+                })
+            } else {
+                res.json({
+                    message: "detail product",
+                    productInfo: doc
+                })
+            }
+
+            // res.json({
+            //     message: "detail product",
+            //     productInfo: doc
+            // })
+        })
+        .catch(err => {
+            res.json({
+                message: err.message
+            })
+        })
+
+
+})
+
 
 
 // product upadate API
