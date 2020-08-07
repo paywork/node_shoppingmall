@@ -2,12 +2,21 @@
 const express = require('express')
 const morgan = require('morgan')
 const bodyParser = require('body-parser')
+const mongoose = require('mongoose')
 const app = express()
 
 
 
 const productRoute = require('./routes/product')
 const orderRoute = require('./routes/order')
+
+// 데이터베이스 연결
+const dbaddress = "mongodb+srv://admin:admin1234@cluster0.7l85d.mongodb.net/nodeshoppingmall?retryWrites=true&w=majority"
+
+mongoose
+    .connect(dbaddress, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(_ => console.log('mongodb connected'))
+    .catch(error => console.log(error.message))
 
 
 
