@@ -103,6 +103,22 @@ router.delete('/', (req, res) => {
     })
 })
 
+// detail product delete API
+router.delete('/:productID', (req, res) => {
+    productModel
+        .findByIdAndDelete(req.params.productID)
+        .then(() => {
+            res.json({
+                message: 'deleted product'
+            })
+        })
+        .catch(err => {
+            res.json({
+                message: err.message
+            })
+        })
+})
+
 
 
 // 2. 
