@@ -11,8 +11,9 @@ const productRoute = require('./routes/product')
 const orderRoute = require('./routes/order')
 
 // 데이터베이스 연결
-const dbaddress = "mongodb+srv://admin:admin1234@cluster0.7l85d.mongodb.net/nodeshoppingmall?retryWrites=true&w=majority"
-
+// const dbaddress = "mongodb+srv://admin:admin1234@cluster0.7l85d.mongodb.net/nodeshoppingmall?retryWrites=true&w=majority"
+const dbaddress = "mongodb://joke716:k9915402@ds141294.mlab.com:41294/node-rest-shop"
+    ""
 mongoose
     .connect(dbaddress, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(_ => console.log('mongodb connected'))

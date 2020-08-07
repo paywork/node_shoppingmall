@@ -2,6 +2,8 @@
 const express = require('express')
 const router = express.Router()
 
+const productModel = require('../models/product')
+
 // 3. 
 // Product data 를 Create - Retreive - Update - Delete 
 
@@ -10,26 +12,59 @@ const router = express.Router()
 router.post('/', (req, res) => {
 
 
-    const newProduct = {
-        name: req.body.productname, 
+    // const newProduct = {
+    //     name: req.body.productname,
+    //     price: req.body.productprice
+    //
+    // }
+    const newProduct = new productModel({
+        name: req.body.productname,
         price: req.body.productprice
-
-    }
-
-
-    res.json({
-        message: 'proudct create API',
-        productInfo: newProduct
-
     })
+
+    newProduct
+        .save()
+        .then(doc => {
+            res.json({
+                message: 'saved product',
+                productInfo: doc
+            })
+        })
+        .catch(err => {
+            res.json({
+                message: err.message
+            })
+        })
+
+
+
+    // res.json({
+    //     message: 'proudct create API',
+    //     productInfo: newProduct
+    //
+    // })
 })
 
 
 // product retrieve API
 router.get('/total', (req, res) => {
-    res.json({
-        message: 'product retrieve API'
-    })
+    // res.json({
+    //     message: 'product retrieve API'
+    // })
+    productModel
+        .find()
+        .then(docs => {
+            res.json({
+                message: 'total product data',
+                count: docs.length,
+                products: docs
+            })
+        })
+        .catch(err => {
+            res.json({
+                message: err.message
+            })
+        })
 })
 
 
