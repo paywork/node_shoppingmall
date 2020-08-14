@@ -54,18 +54,76 @@ router.post('/', (req, res) => {
 
 
 // Order retrieve API
-router.get('/', (req, res) => {
-    res.json ({
-        message: 'order retrieve API'
-    })
+router.get('/total', (req, res) => {
+    orderModel
+        .find()
+        .then(items => {
+            const result = {
+                count: items.length,
+                orders: items.map(item => {
+                    return{
+                        id: item._id,
+                        quantity: item.quantity,
+                        product: item.product,
+                        request: {
+                            type: "GET",
+                            url: "http://localhost:3838/order/" + item._id
+                        }
+
+                    }
+                })
+            }
+            res.json(result)
+        })
+        .catch(err => {
+            message: err.message
+        })
+
+
+
+    // res.json ({
+    //     message: 'order retrieve API'
+    // })
 })
 
+// Order detail retrieve APi
+router.get('/:orderID', (req, res) =>{
+    orderModel
+        .findById(req.params.orderID)
+        .then(item => {
+            if(!item) {
+                res.json({
+                    message: "no order"
+                })
+            } else {
+                res.json({
+                    message: "detail order",
+                    orderInfo: {
+                        id: item._id,
+                        quantity: item.quantity,
+                        product: item.product,
+                        request: {
+                            type: "GET",
+                            url: "http://localhost:3838/order/total"
+                        }
+                    }
+                })
+            }
+        })
+        .catch(err => {
+            res.json({
+                message: err.message
+            })
+        })
+
+})
 
 // Order update API
 router.patch('/', (req, res) => {
-    res.json ({
-        message: 'order update API'
-    })
+    
+    // res.json ({
+    //     message: 'order update API'
+    // })
 })
 
 
@@ -74,6 +132,27 @@ router.delete ('/', (req, res) => {
     res.json({
         message: 'order delete API'
     })
+})
+
+
+//detail order delete API
+router.delete('/:orderID', (req, res) =>{
+    orderModel
+        .findByIdAndDelete(req.params.orderID)
+        .then(() => {
+            res.json({
+                message: 'deleted order',
+                request: {
+                    type: 'GET',
+                    url: "http://localhost:3838/order/total"
+                }
+            })
+        })
+        .catch(err => {
+            res.json({
+                message: err.message
+            })
+        })
 })
 
 
