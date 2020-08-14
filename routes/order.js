@@ -13,7 +13,7 @@ router.post('/', (req, res) => {
         .findById(req.body.productId)
         .then(product => {
             if (!product) {
-                res.json({
+                return res.json({
                     message: "no product ID"
                 })
             } else {
