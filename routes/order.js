@@ -1,22 +1,55 @@
 const express = require('express')
 const router = express.Router()
 
-
+const orderModel = require('../models/order')
+const productModel = require('../models/product')
 // Order data를 C R U D 
 
 
 // Order create API
 router.post('/', (req, res) => {
 
-    const newOrder = {
-        productid: req.body.productid,
-        quantity: req.body.quantity
-    }
+    productModel
+        .findById(req.body.productId)
+        .then(product => {
+            if (!product) {
+                res.json({
+                    message: "no product ID"
+                })
+            } else {
+                const newOrder =  new orderModel({
+                    product: req.body.productId,
+                    quantity: req.body.qty
+                })
 
-    res.json({
-        message: 'order create API',
-        orderinfo: newOrder
-    })
+                newOrder
+                    .save()
+                    .then(item => {
+                        res.json({
+                            message: "saved order",
+                            orderInfo: {
+                                id: item._id,
+                                product: item.product,
+                                quantity: item.quantity,
+                                request: {
+                                    type: "GET",
+                                    url: "http://localhost:3838/order/" + item._id
+                                }
+                            }
+                        })
+                    })
+                    .catch(err => {
+                        res.json({
+                            message: err.message
+                        })
+                    })
+            }
+        })
+        .catch(err => {
+            res.json({
+                message: err.message
+            })
+        })
 })
 
 
