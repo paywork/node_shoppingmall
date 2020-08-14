@@ -57,6 +57,7 @@ router.post('/', (req, res) => {
 router.get('/total', (req, res) => {
     orderModel
         .find()
+        .populate("product", ["name", "price"])
         .then(items => {
             const result = {
                 count: items.length,
@@ -90,6 +91,7 @@ router.get('/total', (req, res) => {
 router.get('/:orderID', (req, res) =>{
     orderModel
         .findById(req.params.orderID)
+        .populate("product", ["name", "price"])
         .then(item => {
             if(!item) {
                 res.json({
@@ -119,11 +121,30 @@ router.get('/:orderID', (req, res) =>{
 })
 
 // Order update API
-router.patch('/', (req, res) => {
-    
+router.patch('/:orderID', (req, res) => {
+    const updateItems = {};
+    for (const item of req.body) {
+        updateItems[item.propName] = item.value;
+    }
     // res.json ({
     //     message: 'order update API'
     // })
+    orderModel
+        .findByIdAndUpdate(req.params.orderID, {$set: updateItems})
+        .then(_ => {
+            res.json({
+                message: "update order at" + req.params.orderID,
+                request: {
+                    type: "GET",
+                    url: "http://localhost:3838/order/" + req.params.orderID
+                }
+            })
+        })
+        .catch(err => {
+            res.json({
+                message: err.message
+            })
+        })
 })
 
 
