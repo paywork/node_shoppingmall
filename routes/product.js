@@ -48,11 +48,28 @@ router.get('/total', (req, res) => {
     productModel
         .find()
         .then(docs => {
-            res.json({
-                message: 'total product data',
+            const result = {
                 count: docs.length,
-                products: docs
-            })
+                products: docs.map(doc => {
+                    return{
+                        id: doc._id,
+                        name: doc.name,
+                        price: doc.price,
+                        request: {
+                            type: "GET",
+                            url: "http://localhost:3838/product/" + doc._id
+                        }
+                    }
+                })
+            }
+
+            res.json(result)
+
+            // res.json({
+            //     message: 'total product data',
+            //     count: docs.length,
+            //     products: docs
+            // })
         })
         .catch(err => {
             res.json({
