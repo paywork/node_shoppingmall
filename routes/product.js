@@ -87,11 +87,31 @@ router.get('/:productid', (req, res) => {
 
 
 
-// product upadate API
-router.patch('/', (req, res) => {
-    res.json({
-        message: 'product upadate API'
-    })
+// product update API
+router.patch('/:productID', (req, res) => {
+
+
+    const updateItems = {};
+    for (const items of req.body) {
+        updateItems[items.propName] = items.value;
+    }
+
+
+    productModel
+        .findByIdAndUpdate(req.params.productID, {$set: updateItems})
+        .then(_ => {
+            res.json({
+                message: "updated product at " + req.params.productID
+            })
+        })
+        .catch(err => {
+            res.json({
+                message: err.message
+            })
+        })
+    // res.json({
+    //     message: 'product upadate API'
+    // })
 })
 
 
