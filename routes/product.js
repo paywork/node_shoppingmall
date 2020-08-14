@@ -134,7 +134,11 @@ router.patch('/:productID', (req, res) => {
         .findByIdAndUpdate(req.params.productID, {$set: updateItems})
         .then(_ => {
             res.json({
-                message: "updated product at " + req.params.productID
+                message: "updated product at " + req.params.productID,
+                request: {
+                    type: "GET",
+                    url: "http://localhost:3838/product/" + req.params.productID
+                }
             })
         })
         .catch(err => {
@@ -162,7 +166,11 @@ router.delete('/:productID', (req, res) => {
         .findByIdAndDelete(req.params.productID)
         .then(() => {
             res.json({
-                message: 'deleted product'
+                message: 'deleted product',
+                request: {
+                    type: "GET",
+                    url: "http://localhost:3838/product/total"
+                }
             })
         })
         .catch(err => {
