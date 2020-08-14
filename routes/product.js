@@ -22,7 +22,15 @@ router.post('/', (req, res) => {
         .then(doc => {
             res.json({
                 message: 'saved product',
-                productInfo: doc
+                productInfo: {
+                    id: doc._id,
+                    name: doc.name,
+                    price: doc.price,
+                    request: {
+                        type: 'GET',
+                        url: "http://localhost:3838/product/" + doc._id
+                    }
+                }
             })
         })
         .catch(err => {
@@ -67,7 +75,15 @@ router.get('/:productid', (req, res) => {
             } else {
                 res.json({
                     message: "detail product",
-                    productInfo: doc
+                    productInfo: {
+                        id: doc._id,
+                        name: doc.name,
+                        price: doc.price,
+                        request: {
+                            type: 'GET',
+                            url: "http://localhost:3838/product/total"
+                        }
+                    }
                 })
             }
 
