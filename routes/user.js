@@ -76,7 +76,30 @@ router.post('/signup', (req, res) =>{
 
 // 로그인
 router.post('/login', (req, res) => {
-
+   userModel
+       .findOne({email: req.body.email})
+       .then(user => {
+           if(!user){
+               return res.json({
+                   message: "no email"
+               })
+           } else {
+               bcrypt.compare(req.body.password, user.password, (err, result) =>{
+                   if(err || result === false){
+                       return res.json({
+                           message: "password incorrect"
+                       })
+                   } else {
+                       res.json(user)
+                   }
+               })
+           }
+       })
+       .catch(err => {
+           res.json({
+               err: err.message
+           })
+       })
 })
 
 
