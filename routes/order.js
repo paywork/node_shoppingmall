@@ -1,13 +1,13 @@
 const express = require('express')
 const router = express.Router()
-
+const verifyauth = require('../middleware/verify-auth')
 const orderModel = require('../models/order')
 const productModel = require('../models/product')
 // Order data를 C R U D 
 
 
 // Order create API
-router.post('/', (req, res) => {
+router.post('/', verifyauth, (req, res) => {
 
     productModel
         .findById(req.body.productId)
@@ -54,7 +54,7 @@ router.post('/', (req, res) => {
 
 
 // Order retrieve API
-router.get('/total', (req, res) => {
+router.get('/total', verifyauth ,(req, res) => {
     orderModel
         .find()
         .populate("product", ["name", "price"])
@@ -95,7 +95,7 @@ router.get('/total', (req, res) => {
 })
 
 // Order detail retrieve APi
-router.get('/:orderID', (req, res) =>{
+router.get('/:orderID', verifyauth ,(req, res) =>{
     orderModel
         .findById(req.params.orderID)
         .populate("product", ["name", "price"])
@@ -128,7 +128,7 @@ router.get('/:orderID', (req, res) =>{
 })
 
 // Order update API
-router.patch('/:orderID', (req, res) => {
+router.patch('/:orderID', verifyauth ,(req, res) => {
     const updateItems = {};
     for (const item of req.body) {
         updateItems[item.propName] = item.value;
@@ -156,7 +156,7 @@ router.patch('/:orderID', (req, res) => {
 
 
 // Order delete API
-router.delete ('/', (req, res) => {
+router.delete ('/', verifyauth, (req, res) => {
     res.json({
         message: 'order delete API'
     })
@@ -164,7 +164,7 @@ router.delete ('/', (req, res) => {
 
 
 //detail order delete API
-router.delete('/:orderID', (req, res) =>{
+router.delete('/:orderID', verifyauth, (req, res) =>{
     orderModel
         .findByIdAndDelete(req.params.orderID)
         .then(() => {

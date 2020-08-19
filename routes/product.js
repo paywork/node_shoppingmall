@@ -1,7 +1,7 @@
 // 1. 
 const express = require('express')
 const router = express.Router()
-
+const verifyauth = require('../middleware/verify-auth')
 const productModel = require('../models/product')
 
 // 3. 
@@ -9,8 +9,7 @@ const productModel = require('../models/product')
 
 
 // proudct create API (함수를 이용해서)
-router.post('/', (req, res) => {
-
+router.post('/', verifyauth , (req, res) => {
 
     const newProduct = new productModel({
         name: req.body.productname,
@@ -80,7 +79,7 @@ router.get('/total', (req, res) => {
 
 
 // detail product retrieve API
-router.get('/:productid', (req, res) => {
+router.get('/:productid', verifyauth , (req, res) => {
 
     productModel
         .findById(req.params.productid)
@@ -121,7 +120,7 @@ router.get('/:productid', (req, res) => {
 
 
 // product update API
-router.patch('/:productID', (req, res) => {
+router.patch('/:productID', verifyauth, (req, res) => {
 
 
     const updateItems = {};
@@ -154,14 +153,14 @@ router.patch('/:productID', (req, res) => {
 
 
 // product delete API 
-router.delete('/', (req, res) => {
+router.delete('/', verifyauth ,(req, res) => {
     res.json({
         message: 'product delete API'
     })
 })
 
 // detail product delete API
-router.delete('/:productID', (req, res) => {
+router.delete('/:productID', verifyauth,(req, res) => {
     productModel
         .findByIdAndDelete(req.params.productID)
         .then(() => {
