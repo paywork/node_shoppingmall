@@ -59,22 +59,29 @@ router.get('/total', (req, res) => {
         .find()
         .populate("product", ["name", "price"])
         .then(items => {
-            const result = {
-                count: items.length,
-                orders: items.map(item => {
-                    return{
-                        id: item._id,
-                        quantity: item.quantity,
-                        product: item.product,
-                        request: {
-                            type: "GET",
-                            url: "http://localhost:3838/order/" + item._id
-                        }
-
-                    }
+            if(items.length === 0){
+                return res.json({
+                    message: "no order count"
                 })
+            } else {
+                const result = {
+                    count: items.length,
+                    orders: items.map(item => {
+                        return{
+                            id: item._id,
+                            quantity: item.quantity,
+                            product: item.product,
+                            request: {
+                                type: "GET",
+                                url: "http://localhost:3838/order/" + item._id
+                            }
+
+                        }
+                    })
+                }
+                res.json(result)
             }
-            res.json(result)
+           
         })
         .catch(err => {
             message: err.message
