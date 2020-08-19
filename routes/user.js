@@ -2,6 +2,7 @@
 const express = require('express')
 const router = express.Router()
 const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
 const userModel = require('../models/user')
 
 
@@ -90,7 +91,20 @@ router.post('/login', (req, res) => {
                            message: "password incorrect"
                        })
                    } else {
-                       res.json(user)
+                       // res.json(user)
+
+                       //토큰 생성, 상수화
+                       const token = jwt.sign(
+                           {email: user.email, id: user._id},
+                           "key",
+                           {expiresIn: "1d"}
+                       )
+
+                       res.json({
+                           message: "successful login",
+                           tokenInfo: token
+                       })
+
                    }
                })
            }
